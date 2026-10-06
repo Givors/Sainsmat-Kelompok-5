@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sainsmat - Mengenal Berbagai Suara Manusia</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Default Theme: Tosca */
+            --theme-primary: #008f8a;
+            --theme-dark: #005f5b;
+            --theme-light: #f0fdfa;
+            --theme-card-bg: #e6f4f3;
+            --theme-accent: #22d3ee;
+            --theme-gradient: linear-gradient(135deg, #004d49 0%, #008f8a 55%, #22d3ee 100%);
+            --bg-page: #0b1312;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+        }
+
+        /* Color Theme Presets */
+        body[data-theme="tosca"] {
+            --theme-primary: #008f8a;
+            --theme-dark: #005f5b;
+            --theme-light: #f0fdfa;
+            --theme-card-bg: #e6f4f3;
+            --theme-accent: #22d3ee;
+            --theme-gradient: linear-gradient(135deg, #004d49 0%, #008f8a 55%, #22d3ee 100%);
+            --bg-page: #0b1312;
+        }
+
+        body[data-theme="pink"] {
+            --theme-primary: #ec4899;
+            --theme-dark: #9d174d;
+            --theme-light: #fdf2f8;
+            --theme-card-bg: #fce7f3;
+            --theme-accent: #f472b6;
+            --theme-gradient: linear-gradient(135deg, #831843 0%, #ec4899 55%, #f472b6 100%);
+            --bg-page: #180910;
+        }
+
+        body[data-theme="biru"] {
+            --theme-primary: #2563eb;
+            --theme-dark: #1e3a8a;
+            --theme-light: #eff6ff;
+            --theme-card-bg: #dbeafe;
+            --theme-accent: #3b82f6;
+            --theme-gradient: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #60a5fa 100%);
+            --bg-page: #090d16;
+        }
+
+        body[data-theme="ungu"] {
+            --theme-primary: #8b5cf6;
+            --theme-dark: #4c1d95;
+            --theme-light: #f5f3ff;
+            --theme-card-bg: #ede9fe;
+            --theme-accent: #a78bfa;
+            --theme-gradient: linear-gradient(135deg, #4c1d95 0%, #8b5cf6 55%, #c084fc 100%);
+            --bg-page: #100b1a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg-page);
+            color: var(--text-dark);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: background 0.4s ease;
+        }
+
+        /* Container Presentation Deck */
+        .deck-container {
+            width: 92vw;
+            max-width: 1150px;
+            height: 88vh;
+            max-height: 720px;
+            position: relative;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header & Theme Switcher (NO LOGO IMAGES) */
+        .brand-header {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 18px;
+            border-radius: 50px;
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .brand-text {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--theme-dark);
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .brand-text span {
+            color: var(--theme-primary);
+            font-weight: 600;
+        }
+
+        .divider {
+            width: 1px;
+            height: 20px;
+            background-color: var(--border-color);
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 0 4px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .color-dot:hover {
+            transform: scale(1.2);
+        }
+
+        .color-dot.tosca { background: #008f8a; }
+        .color-dot.pink { background: #ec4899; }
+        .color-dot.biru { background: #2563eb; }
+        .color-dot.ungu { background: #8b5cf6; }
+
+        /* Slide Items Base */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: calc(100% - 70px);
+            padding: 40px 50px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(15px);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* COVER SLIDE */
+        .slide-title {
+            background: var(--theme-gradient);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .slide-title .header-info {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 12px;
+        }
+
+        .slide-title h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            line-height: 1.25;
+            margin-top: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .slide-title .subtitle {
+            font-size: 1.15rem;
+            opacity: 0.92;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .group-badge {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--theme-dark);
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 16px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .lecturer-box {
+            margin-top: 12px;
+            background: rgba(0, 0, 0, 0.22);
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* HEADINGS */
+        h2.slide-heading {
+            color: var(--theme-dark);
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 3px solid var(--theme-card-bg);
+            padding-bottom: 10px;
+        }
+
+        /* GRID LAYOUTS */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+
+        /* CARDS & CONTAINERS */
+        .card {
+            background: var(--theme-card-bg);
+            padding: 22px;
+            border-radius: 16px;
+            border-left: 5px solid var(--theme-primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: border-box;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .card.white-bg {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 5px solid var(--theme-primary);
+        }
+
+        .card h3 {
+            color: var(--theme-dark);
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p, .card li {
+            font-size: 0.93rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* VISUAL METERS & CHARTS */
+        .meter-container {
+            margin-top: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 16px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: var(--theme-gradient);
+            border-radius: 10px;
+        }
+
+        .hz-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 140px;
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 15px;
+        }
+
+        .hz-bar-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            width: 20%;
+        }
+
+        .hz-bar {
+            width: 100%;
+            background: var(--theme-primary);
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease;
+        }
+
+        .hz-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--theme-dark);
+        }
+
+        /* AUDIO MIC VISUALIZER STYLES */
+        .mic-box {
+            background: var(--theme-light);
+            border: 2px dashed var(--theme-primary);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .mic-btn {
+            background: var(--theme-primary);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .mic-btn:hover {
+            opacity: 0.9;
+            transform: scale(1.03);
+        }
+
+        .mic-btn.active {
+            background: #ef4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        .visualizer-canvas {
+            width: 100%;
+            height: 70px;
+            background: #0f172a;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* LIST STYLES */
+        ul.custom-list { list-style: none; }
+        ul.custom-list li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 22px;
+        }
+        ul.custom-list li::before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            color: var(--theme-primary);
+            font-size: 0.85rem;
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background: var(--theme-primary);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        /* SLIDE 12: 3D THANK YOU & REPEATABLE MARQUEE */
+        .thank-you-slide {
+            background: var(--theme-gradient);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .thank-you-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.3), 0 0 30px rgba(255,255,255,0.2);
+            transform: perspective(500px) rotateX(10deg);
+            margin-bottom: 30px;
+        }
+
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transform: perspective(600px) rotateX(15deg) rotateY(-5deg);
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 30px;
+            width: max-content;
+            animation: marquee 16s linear infinite;
+        }
+
+        .marquee-track-reverse {
+            display: flex;
+            gap: 30px;
+            width: max-content;
+            animation: marquee-reverse 16s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes marquee-reverse {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        .marquee-card {
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            white-space: nowrap;
+        }
+
+        /* NAVIGATION CONTROLS */
+        .controls {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 70px;
+            background: var(--theme-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 35px;
+            color: white;
+            z-index: 90;
+            transition: background 0.4s ease;
+        }
+
+        .nav-btn {
+            background: var(--theme-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: rgba(255,255,255,0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+        }
+
+        .source-tag {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: auto;
+            padding-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body data-theme="tosca">
+
+    <div class="deck-container">
+
+        <!-- BRAND HEADER WITH COLOR THEME SWITCHER (NO LOGO IMAGES) -->
+        <div class="brand-header">
+            <div class="brand-text">
+                UNESA <span>| Pendidikan Luar Biasa</span>
+            </div>
+            <div class="divider"></div>
+            <!-- Theme Color Switcher -->
+            <div class="color-picker">
+                <div class="color-dot tosca" title="Theme Tosca" onclick="setTheme('tosca')"></div>
+                <div class="color-dot pink" title="Theme Pink" onclick="setTheme('pink')"></div>
+                <div class="color-dot biru" title="Theme Biru" onclick="setTheme('biru')"></div>
+                <div class="color-dot ungu" title="Theme Ungu" onclick="setTheme('ungu')"></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 1: COVER -->
+        <div class="slide slide-title active">
+            <div class="header-info">
+                <span class="group-badge">KELOMPOK 5</span>
+                <span style="font-size: 0.88rem; opacity: 0.9; margin-left: 10px;">MATA KULIAH SAINSMAT</span>
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <h1>Mengenal Berbagai Suara Manusia</h1>
+                <p class="subtitle">Berdasarkan Sumber dan Karakteristik Akustiknya</p>
+                <p style="font-size: 0.9rem; opacity: 0.85; margin-top: 5px;">Universitas Negeri Surabaya</p>
+            </div>
+
+            <div>
+                <p style="font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; letter-spacing: 0.5px;">ANGGOTA KELOMPOK:</p>
+                <div class="team-grid">
+                    <div class="member-card"><span>Shafiyyah Nurdin</span> <b>25010044068</b></div>
+                    <div class="member-card"><span>Rachel Reyna Fadila</span> <b>25010044111</b></div>
+                    <div class="member-card"><span>Amelia Puspita Sari</span> <b>25010044106</b></div>
+                    <div class="member-card"><span>Muhammad Dama Wahyu P.</span> <b>25010044140</b></div>
+                    <div class="member-card" style="grid-column: span 2;"><span>Nadine Lury Qotrunada</span> <b>25010044010</b></div>
+                </div>
+
+                <div class="lecturer-box">
+                    <b>Dosen Pengampu:</b> Dr. Asri Wijiastuti, M.Pd. &nbsp;|&nbsp; Diah Anggraeny, S.Pd., M.Pd.
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: INTENSITAS SUARA & DESIBEL -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-volume-high"></i> Intensitas Suara & Skala Desibel (dB)</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3><i class="fa-solid fa-gauge-high"></i> Konsep Intensitas Suara</h3>
+                    <p style="background: rgba(255,255,255,0.6); padding: 10px; border-radius: 8px; border-left: 3px solid var(--theme-primary); font-weight: 600; margin-bottom: 10px;">
+                        "Intensitas suara adalah jumlah energi bunyi yang dibawa oleh gelombang suara per satuan waktu melalui satu satuan luas bidang yang tegak lurus terhadap arah rambatnya."
+                    </p>
+                    <p><b>Desibel (dB):</b> Mengukur tingkat tekanan suara (SPL) relatif terhadap ambang batas pendengaran manusia (20 µPa).</p>
+                    <p style="margin-top: 6px;"><b>Sifat Logaritmik:</b> Kenaikan 3 dB mewakili penggandaan energi fisik gelombang suara, sedangkan kenaikan 10 dB dipersepsikan sebagai peningkatan kekerasan dua kali lipat.</p>
+                    <div class="source-tag">Source: Dokumen Akustik Sensorik</div>
+                </div>
+                <div class="card white-bg">
+                    <h3>Visualisasi Tingkat Intensitas (dB)</h3>
+                    <div style="margin-top: 10px;">
+                        <div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span>Bisikan (30-40 dB)</span><b>Rendah</b></div>
+                        <div class="meter-container"><div class="meter-fill" style="width: 35%;"></div></div>
+                        
+                        <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-top: 12px;"><span>Percakapan Biasa (55-65 dB)</span><b>Sedang</b></div>
+                        <div class="meter-container"><div class="meter-fill" style="width: 60%;"></div></div>
+
+                        <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-top: 12px;"><span>Keramaian / Crying (80-90 dB)</span><b>Keras</b></div>
+                        <div class="meter-container"><div class="meter-fill" style="width: 85%; background: linear-gradient(90deg, var(--theme-primary), #f59e0b);"></div></div>
+
+                        <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-top: 12px;"><span>Teriakan / Bising (>100 dB)</span><b>Sangat Keras</b></div>
+                        <div class="meter-container"><div class="meter-fill" style="width: 100%; background: linear-gradient(90deg, #f59e0b, #ef4444);"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: FREKUENSI SUARA (HERTZ / Hz) -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-wave-square"></i> Frekuensi Suara (Hertz / Hz)</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3><i class="fa-solid fa-music"></i> Pengertian Frekuensi & Pitch</h3>
+                    <p><b>Frekuensi (Hz)</b> adalah jumlah getaran suara dalam satu detik. Semakin tinggi frekuensinya, semakin tinggi pula nada (pitch) yang terdengar oleh telinga.</p>
+                    <ul class="custom-list" style="margin-top: 12px;">
+                        <li><b>Rentang Pendengaran Manusia:</b> 20 Hz hingga 20.000 Hz.</li>
+                        <li><b>Sensitivitas Optimal:</b> 1.000 Hz – 4.000 Hz (rentang krusial untuk kejelasan tutur percakapan).</li>
+                        <li><b>Frekuensi Tinggi:</b> Dipersepsikan melengking/tajam.</li>
+                        <li><b>Frekuensi Rendah:</b> Dipersepsikan berat/bergemuruh.</li>
+                    </ul>
+                </div>
+
+                <div class="card white-bg">
+                    <h3>Spektrum Frekuensi Penelitian</h3>
+                    <div class="hz-chart">
+                        <div class="hz-bar-wrap">
+                            <span style="font-size: 0.75rem;">Nodal Rendah</span>
+                            <div class="hz-bar" style="height: 35%;"></div>
+                            <span class="hz-label">500 Hz</span>
+                        </div>
+                        <div class="hz-bar-wrap">
+                            <span style="font-size: 0.75rem;">Menengah</span>
+                            <div class="hz-bar" style="height: 55%;"></div>
+                            <span class="hz-label">1.000 Hz</span>
+                        </div>
+                        <div class="hz-bar-wrap">
+                            <span style="font-size: 0.75rem;">Tinggi</span>
+                            <div class="hz-bar" style="height: 80%;"></div>
+                            <span class="hz-label">2.000 Hz</span>
+                        </div>
+                        <div class="hz-bar-wrap">
+                            <span style="font-size: 0.75rem;">Sangat Tinggi</span>
+                            <div class="hz-bar" style="height: 100%; background: var(--theme-dark);"></div>
+                            <span class="hz-label">4.000 Hz</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: STUDI KASUS CARSON ET AL. (2024) -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-microscope"></i> Studi Kasus: Frekuensi & Toleransi Suara</h2>
+            <div class="card white-bg" style="margin-bottom: 18px;">
+                <span class="tag-pill">Tinjauan Riset (Carson et al., 2024)</span>
+                <p>Dalam penelitian Carson et al. (2024) pada seorang anak autis yang mengalami <b>hiperakusis</b> (sensitivitas berlebih terhadap suara), dilakukan pengujian menggunakan rentang frekuensi 500 Hz, 1.000 Hz, 2.000 Hz, dan 4.000 Hz untuk mengukur tingkat toleransi pendengarannya.</p>
+            </div>
+            
+            <div class="grid-2">
+                <div class="card" style="border-left-color: #10b981; background: #ecfdf5;">
+                    <h3 style="color: #047857;"><i class="fa-solid fa-circle-check"></i> Toleransi Baik (500 – 1.000 Hz)</h3>
+                    <p>Anak menunjukkan tingkat toleransi yang jauh lebih stabil dan relatif tenang ketika menerima nada frekuensi rendah hingga menengah (500 Hz & 1 kHz).</p>
+                </div>
+                <div class="card" style="border-left-color: #ef4444; background: #fef2f2;">
+                    <h3 style="color: #b91c1c;"><i class="fa-solid fa-circle-exclamation"></i> Memicu Kecemasan (2.000 – 4.000 Hz)</h3>
+                    <p>Pada frekuensi nada tinggi (2 kHz & 4 kHz), timbul respons ketidaknyamanan yang signifikan, memicu rasa cemas, dan penurunan toleransi sensorik.</p>
+                </div>
+            </div>
+            <div class="source-tag">Source: Carson et al. (2024)</div>
+        </div>
+
+        <!-- SLIDE 5: HUBUNGAN FREKUENSI & RESPONS ANAK AUTIS -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-brain"></i> Hubungan Frekuensi Suara & Anak Autis</h2>
+            <p style="font-size: 0.95rem; margin-bottom: 15px;">Penelitian oleh <b>Scheerer et al. (2022)</b> menemukan bahwa suara bernada tinggi (<i>high-pitched</i>) merupakan salah satu karakteristik utama yang paling sering dilaporkan memicu respons negatif pada anak autis.</p>
+            
+            <div class="grid-2">
+                <div class="card">
+                    <h3><i class="fa-solid fa-bell-concierge"></i> Bentuk Respons Perilaku:</h3>
+                    <ul class="custom-list">
+                        <li><b>Menutup Telinga:</b> Gerakan refleks menutupi telinga secara mendadak.</li>
+                        <li><b>Menghindari Sumber Suara:</b> Berlari atau menjauh dari area bising.</li>
+                        <li><b>Kecemasan & Agitasi:</b> Menunjukkan tanda tertekan atau cemas.</li>
+                        <li><b>Permintaan Verbal/Isyarat:</b> Meminta agar suara segera dihentikan.</li>
+                    </ul>
+                </div>
+                <div class="card white-bg">
+                    <h3><i class="fa-solid fa-layer-group"></i> Catatan Multifaktor:</h3>
+                    <p>Frekuensi bukan satu-satunya penentu tunggal! Kenyamanan anak autis dipengaruhi oleh kombinasi variabel akustik lain:</p>
+                    <div style="margin-top: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.85rem;">
+                        <div style="background: var(--theme-card-bg); padding: 8px; border-radius: 8px;">• Intensitas (dB)</div>
+                        <div style="background: var(--theme-card-bg); padding: 8px; border-radius: 8px;">• Durasi Suara</div>
+                        <div style="background: var(--theme-card-bg); padding: 8px; border-radius: 8px;">• Pengulangan (Ritel)</div>
+                        <div style="background: var(--theme-card-bg); padding: 8px; border-radius: 8px;">• Onset Mendadak</div>
+                    </div>
+                </div>
+            </div>
+            <div class="source-tag">Source: Scheerer et al. (2022)</div>
+        </div>
+
+        <!-- SLIDE 6: POLA TEMPORAL SUARA -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-clock-rotate-left"></i> Pola Temporal: Impulsif vs Kontinu</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <span class="tag-pill">Suara Impulsif</span>
+                    <h3><i class="fa-solid fa-bolt"></i> Onset Mendadak (&lt; 50 ms)</h3>
+                    <p>Suara impulsif muncul secara mendadak dengan puncak intensitas tinggi (contoh: tepuk tangan tiba-tiba, letupan, teriakan).</p>
+                    <p style="margin-top: 10px; font-weight: 600; color: #b91c1c;">Dampak: Sering memicu refleks terkejut (startle response) dan kecemasan sesaat.</p>
+                </div>
+                <div class="card">
+                    <span class="tag-pill">Suara Kontinu</span>
+                    <h3><i class="fa-solid fa-infinity"></i> Durasi Stabil & Mengalir</h3>
+                    <p>Suara kontinu berlangsung stabil dalam durasi yang lebih panjang (contoh: dengung pendingin ruangan, percakapan santai).</p>
+                    <p style="margin-top: 10px; font-weight: 600; color: #047857;">Dampak: Cenderung lebih mudah diproses dan diadaptasi secara kognitif.</p>
+                </div>
+            </div>
+            <div class="source-tag">Source: Dokumen Karakteristik Akustik Suara Manusia</div>
+        </div>
+
+        <!-- SLIDE 7: KATEGORI PEMROSESAN SENSORIK -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-user-gear"></i> Pemrosesan Sensorik Auditori</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Hiperresponsif</h3>
+                    <p>Reaksi berlebihan atau sensitivitas yang sangat tinggi terhadap rangsangan suara tertentu.</p>
+                </div>
+                <div class="card">
+                    <h3>Hiporesponsif</h3>
+                    <p>Reaksi yang lambat atau kurang responsif terhadap rangsangan suara dari lingkungan sekitar.</p>
+                </div>
+                <div class="card">
+                    <h3>Sensory Seeking</h3>
+                    <p>Perilaku aktif mencari atau sangat menyukai rangsangan suara dengan pola tertentu.</p>
+                </div>
+                <div class="card">
+                    <h3>Kesulitan Auditory Filtering</h3>
+                    <p>Tantangan neurobiologis dalam memisahkan suara utama dari suara latar belakang (<i>background noise</i>).</p>
+                </div>
+            </div>
+            <div class="source-tag">Source: Dokumen Karakteristik Akustik Suara Manusia</div>
+        </div>
+
+        <!-- SLIDE 8: CONTOH SUARA SEHARI-HARI (PART 1) + ON MIC VISUALIZER -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-comments"></i> Analisis Contoh Suara Manusia (1)</h2>
+            <div class="grid-2">
+                <div class="card white-bg">
+                    <span class="tag-pill">Bisikan (Whisper)</span>
+                    <p><b>Akustik:</b> ±30–40 dB | Frekuensi 2.000–6.000 Hz (desis)</p>
+                    <p><b>Pola:</b> Kontinu / intermiten & prediktif</p>
+                    <p style="margin-top: 8px;"><b>Respons:</b> Umumnya mudah ditoleransi. Namun desis frekuensi tinggi dapat menarik perhatian anak yang sangat sensitif.</p>
+                </div>
+                <div class="card white-bg">
+                    <span class="tag-pill">Percakapan Biasa</span>
+                    <p><b>Akustik:</b> ±55–65 dB | F0: 85–255 Hz (Forman 500–3.500 Hz)</p>
+                    <p><b>Pola:</b> Kontinu berfluktuasi dengan jeda alami</p>
+                    <p style="margin-top: 8px;"><b>Respons:</b> Intensitas relatif aman, namun pemrosesan makna dapat terganggu jika terdapat tantangan penyaringan auditori.</p>
+                </div>
+            </div>
+
+            <!-- Fitur Interactive Mic & Audio Wave Chart -->
+            <div class="mic-box">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <button class="mic-btn" onclick="toggleMic('canvas1', 'db1', this)"><i class="fa-solid fa-microphone"></i> Fitur ON MIC (Uji Suara Live)</button>
+                    <span style="font-weight:700; font-size:0.9rem;">Estimasi dB: <b id="db1" style="color:var(--theme-primary);">0 dB</b></span>
+                </div>
+                <canvas id="canvas1" class="visualizer-canvas"></canvas>
+            </div>
+            <div class="source-tag">Source: Dokumen Karakteristik Akustik Suara Manusia</div>
+        </div>
+
+        <!-- SLIDE 9: CONTOH SUARA SEHARI-HARI (PART 2) + ON MIC VISUALIZER -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-triangle-exclamation"></i> Analisis Contoh Suara Manusia (2)</h2>
+            <div class="grid-2">
+                <div class="card white-bg">
+                    <span class="tag-pill" style="background:#f59e0b;">Keramaian (Crowd Chatter)</span>
+                    <p><b>Akustik:</b> ±70–85 dB | Spektrum lebar 250–4.000 Hz</p>
+                    <p><b>Pola:</b> Kontinu, berubah-ubah, dan tidak terduga</p>
+                    <p style="margin-top: 8px;"><b>Respons:</b> Berpotensi memicu <i>sensory overload</i>, kelelahan sensorik, atau perilaku menarik diri.</p>
+                </div>
+                <div class="card white-bg">
+                    <span class="tag-pill" style="background:#ef4444;">Tangis Bayi & Teriakan</span>
+                    <p><b>Akustik:</b> ±80–105 dB | Spektrum tajam hingga &gt;4.000 Hz</p>
+                    <p><b>Pola:</b> Impulsif, bernada tinggi, dan berulang</p>
+                    <p style="margin-top: 8px;"><b>Respons:</b> Memicu hiperresponsif signifikan, ketidaknyamanan ekstrim, refleks terkejut, atau agitasi.</p>
+                </div>
+            </div>
+
+            <!-- Fitur Interactive Mic & Audio Wave Chart -->
+            <div class="mic-box">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <button class="mic-btn" onclick="toggleMic('canvas2', 'db2', this)"><i class="fa-solid fa-microphone"></i> Fitur ON MIC (Uji Gelombang Teriakan)</button>
+                    <span style="font-weight:700; font-size:0.9rem;">Estimasi dB: <b id="db2" style="color:#ef4444;">0 dB</b></span>
+                </div>
+                <canvas id="canvas2" class="visualizer-canvas"></canvas>
+            </div>
+            <div class="source-tag">Source: Dokumen Karakteristik Akustik Suara Manusia</div>
+        </div>
+
+        <!-- SLIDE 10: FAKTOR INTERVENSI RESPONS SENSORIK -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-sliders"></i> Faktor Intervensi Respons Sensorik</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3><i class="fa-solid fa-fingerprint"></i> Sensitivitas Individual</h3>
+                    <p>Setiap anak memiliki ambang pemrosesan neurobiologis yang unik (hiperresponsif atau hiporesponsif).</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fa-solid fa-eye"></i> Prediktabilitas</h3>
+                    <p>Suara yang mandiri/dapat diperkirakan jauh lebih mudah ditoleransi dibanding suara eksternal yang mengejutkan.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fa-solid fa-heart-pulse"></i> Kondisi Fisik & Emosional</h3>
+                    <p>Faktor kelelahan, stres, dan kecemasan dapat menurunkan ambang toleransi anak terhadap rangsangan suara.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fa-solid fa-building"></i> Konteks Ruangan & Gema</h3>
+                    <p>Tingkat gema (reverberation) yang tinggi dalam ruangan dapat memperpanjang paparan suara dan menambah kebingungan.</p>
+                </div>
+            </div>
+            <div class="source-tag">Source: Dokumen Karakteristik Akustik Suara Manusia</div>
+        </div>
+
+        <!-- SLIDE 11: DAFTAR PUSTAKA -->
+        <div class="slide">
+            <h2 class="slide-heading"><i class="fa-solid fa-book-bookmark"></i> Source / Citations</h2>
+            <div class="card white-bg">
+                <ul class="custom-list">
+                    <li>American Psychiatric Association (APA). (2013). <i>Diagnostic and Statistical Manual of Mental Disorders (DSM-5)</i>.</li>
+                    <li>Ben-Sasson et al. (2009). <i>A meta-analysis of sensory modulation in autism spectrum disorders</i>.</li>
+                    <li>Carson et al. (2024). <i>Frequency-specific auditory tolerance in autism with hyperacusis</i>.</li>
+                    <li>Lau et al. (2023). <i>Auditory processing and sensory profiles in autism</i>. Autism Research.</li>
+                    <li>O'Connor, K. (2012). <i>Auditory processing in autism spectrum disorder</i>. Neuroscience & Biobehavioral Reviews.</li>
+                    <li>Rotschafer, S. (2021). <i>Auditory hypersensitivity in neurodevelopmental conditions</i>. Frontiers in Neuroscience.</li>
+                    <li>Scheerer et al. (2022). <i>Acoustic features triggering sensory reactions in autistic individuals</i>.</li>
+                    <li>Tomchek, S. D., & Dunn, W. (2007). <i>Sensory processing in children with autism</i>. AJOT.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: TERIMA KASIH & 3D REPEATABLE MARQUEE NAMA KELOMPOK -->
+        <div class="slide thank-you-slide">
+            <h1 class="thank-you-title">TERIMA KASIH!</h1>
+            <p style="font-size: 1.1rem; opacity: 0.9; margin-bottom: 30px;">Presentasi Sainsmat - Universitas Negeri Surabaya</p>
+            
+            <div class="marquee-container">
+                <!-- Baris 1: Kiri ke Kanan -->
+                <div class="marquee-track">
+                    <div class="marquee-card">Shafiyyah Nurdin (25010044068)</div>
+                    <div class="marquee-card">Rachel Reyna Fadila (25010044111)</div>
+                    <div class="marquee-card">Amelia Puspita Sari (25010044106)</div>
+                    <div class="marquee-card">Muhammad Dama Wahyu P. (25010044140)</div>
+                    <div class="marquee-card">Nadine Lury Qotrunada (25010044010)</div>
+                    <!-- Duplicate for infinite seamless loop -->
+                    <div class="marquee-card">Shafiyyah Nurdin (25010044068)</div>
+                    <div class="marquee-card">Rachel Reyna Fadila (25010044111)</div>
+                    <div class="marquee-card">Amelia Puspita Sari (25010044106)</div>
+                    <div class="marquee-card">Muhammad Dama Wahyu P. (25010044140)</div>
+                    <div class="marquee-card">Nadine Lury Qotrunada (25010044010)</div>
+                </div>
+
+                <!-- Baris 2: Kanan ke Kiri (Repeatable) -->
+                <div class="marquee-track-reverse">
+                    <div class="marquee-card">Kelompok 5 - Sainsmat UNESA</div>
+                    <div class="marquee-card">Pendidikan Luar Biasa</div>
+                    <div class="marquee-card">Dr. Asri Wijiastuti, M.Pd.</div>
+                    <div class="marquee-card">Diah Anggraeny, S.Pd., M.Pd.</div>
+                    <div class="marquee-card">Analisis Akustik Suara Manusia</div>
+                    <!-- Duplicate for infinite seamless loop -->
+                    <div class="marquee-card">Kelompok 5 - Sainsmat UNESA</div>
+                    <div class="marquee-card">Pendidikan Luar Biasa</div>
+                    <div class="marquee-card">Dr. Asri Wijiastuti, M.Pd.</div>
+                    <div class="marquee-card">Diah Anggraeny, S.Pd., M.Pd.</div>
+                    <div class="marquee-card">Analisis Akustik Suara Manusia</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION CONTROLS BAR -->
+        <div class="controls">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)"><i class="fa-solid fa-arrow-left"></i> SEBELUMNYA</button>
+            <div class="slide-counter" id="slideCounter">1 / 12</div>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">SELANJUTNYA <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const slideCounter = document.getElementById('slideCounter');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Theme Switcher Function
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+        }
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) {
+                    slide.classList.add('active');
+                }
+            });
+
+            slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            
+            // Limit navigation buttons
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+            updateSlide();
+        }
+
+        // Arrow Key Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                if (currentSlide < slides.length - 1) changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 0) changeSlide(-1);
+            }
+        });
+
+        // Web Audio API Visualizer On-Mic Feature
+        let audioCtx, analyser, microphone, stream;
+        let isMicActive = false;
+        let animId;
+
+        async function toggleMic(canvasId, dbId, btn) {
+            if (isMicActive) {
+                // Turn off Mic
+                if (stream) stream.getTracks().forEach(track => track.stop());
+                if (audioCtx) audioCtx.close();
+                cancelAnimationFrame(animId);
+                isMicActive = false;
+                btn.classList.remove('active');
+                btn.innerHTML = `<i class="fa-solid fa-microphone"></i> Fitur ON MIC (Uji Suara Live)`;
+                document.getElementById(dbId).innerText = `0 dB`;
+                return;
+            }
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                microphone = audioCtx.createMediaStreamSource(stream);
+
+                microphone.connect(analyser);
+                analyser.fftSize = 128;
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+
+                const canvas = document.getElementById(canvasId);
+                const canvasCtx = canvas.getContext('2d');
+
+                isMicActive = true;
+                btn.classList.add('active');
+                btn.innerHTML = `<i class="fa-solid fa-microphone-slash"></i> Matikan Mic`;
+
+                function draw() {
+                    if (!isMicActive) return;
+                    animId = requestAnimationFrame(draw);
+
+                    analyser.getByteFrequencyData(dataArray);
+
+                    // Calculate average volume dB estimate
+                    let sum = 0;
+                    for (let i = 0; i < bufferLength; i++) {
+                        sum += dataArray[i];
+                    }
+                    let average = sum / bufferLength;
+                    let estimatedDb = Math.round(Math.min(110, (average / 255) * 100 + 30));
+                    document.getElementById(dbId).innerText = `${estimatedDb} dB`;
+
+                    // Draw Waveform Chart
+                    canvasCtx.fillStyle = '#0f172a';
+                    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    const barWidth = (canvas.width / bufferLength) * 2.5;
+                    let x = 0;
+
+                    for (let i = 0; i < bufferLength; i++) {
+                        let barHeight = (dataArray[i] / 255) * canvas.height;
+                        canvasCtx.fillStyle = `hsl(${i * 12 + 160}, 80%, 50%)`;
+                        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+                        x += barWidth + 2;
+                    }
+                }
+
+                draw();
+            } catch (err) {
+                alert('Akses mikrofon ditolak atau tidak didukung di browser ini.');
+            }
+        }
+
+        // Initialize presentation
+        updateSlide();
+    </script>
+</body>
+</html>
