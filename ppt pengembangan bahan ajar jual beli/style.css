@@ -1,0 +1,48 @@
+/* Background Pastel Themes */
+body.theme-pink { background: linear-gradient(135deg, #fdf2f8 0%, #fbcfe8 100%); }
+body.theme-red { background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 100%); }
+body.theme-orange { background: linear-gradient(135deg, #fffbeb 0%, #fde68a 100%); }
+body.theme-yellow { background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%); }
+body.theme-green { background: linear-gradient(135deg, #ecfdf5 0%, #a7f3d0 100%); }
+body.theme-blue { background: linear-gradient(135deg, #f0f9ff 0%, #bae6fd 100%); }
+body.theme-purple { background: linear-gradient(135deg, #f5f3ff 0%, #ddd6fe 100%); }
+
+/* Slide Transition Animations */
+.slide {
+    display: none;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.slide.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Credits Smooth Scroll */
+@keyframes scrollUp {
+    0% { transform: translateY(100%); }
+    100% { transform: translateY(-100%); }
+}
+
+.credits-scroll {
+    animation: scrollUp 14s linear infinite;
+}
+
+.credits-scroll:hover {
+    animation-play-state: paused;
+}
+
+/* Coin Drop Animation */
+@keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(450px) rotate(360deg); opacity: 0; }
+}
+
+.coin {
+    position: absolute;
+    font-size: 24px;
+    animation: fall 1.5s linear forwards;
+}
